@@ -49,3 +49,52 @@ glamorous — but they were **foundational**. The project is now officially unde
 
 
 </details>
+
+
+<details>
+  <summary>📅 2025-06-21 – ✅ Successful Full Bronze Load & Dev Edition Setup</summary>
+
+## 06/21/2025
+
+Today marked a major milestone in the infrastructure of the project: __successfully loading all Bronze layer tables__ into SQL using BULK INSERT via a fully automated stored procedure. This included runtime logging for each stage and batch. This was also the day I transitioned from SQL Express to __SQL Developer Edition__ after hitting storage and license limits -- a critical and necessary upgrade.
+
+### Progress
+
+- Ran and confirmed successful execution of the `bronze.load_bronze` stored procedure, which loaded all four M5 tables:
+  - `calendar`
+  - `sales_train_evaluation` (melted)
+  - `sales_train_validation` (melted)
+  - `sell_prices`
+
+- Added execution time logs to each table's load process, outputting both minutes and seconds.
+- Pushed Bronze Layer SQL scripts to GitHub with organized structure and comments.
+- Enabled __autogrowth__ on both `walmart` and `walmart_log` files to prepare for growing data loads.
+- Switched to SQL Server Developer Edition after encountering persistent storage allocation errors with Express Edition.
+
+### Challenges
+
+1. __Disk Space Limitations (SQL Express)__
+
+  - Encountered: "*Insufficient disk space in fielgroup 'PRIMARY'*" and "*cumulative database size would exceed your licensed limit*"
+
+  - Tried enabling autogrowth, but this did not resolve the issue -- the real blocker was the 10GB size cap of SQL Express
+
+2. __SQL Developer Editino Migration__
+
+  - After installing Dev Edition, inital confusin around MSSQLSERVER vs. SQLEXPRESS instances.
+  - Verified active server with SELECT @@SERVICENAME, @@VERSION and successfully connected to the new instance.
+
+3. __Data Reload from Scratch)__
+
+  - Switching instances required rebuilding the database, re-importing the tables, and rerunning all creation + load scripts.
+  - Fortunately, having clean and modular SQL scripts paid off -- this was tedious, but not chaotic.
+
+4. __File Transfer Logistics__
+
+  - Melted datasets were generated on Mac and moved via external hard drive to Windows laptop running SQL Server.
+
+### __Reflection__
+
+__Huge win today.__ The Bronze Layer is not just 'set up' -- its operational and robust. Every table now loads reliably from raw CSV, and runtime logging adds a layer of professionalism. It wasn't without pain: Express Edition's limits were a brick wall, and reinitializing the database felt redundant at times. But all of the frustration is front-loaded technical debt -- and now it's paid off. From here, I can build Silver/Gold layers confidently, knowing that data ingestion is no longer a bottleneck. Today was not flashy, but it was real. The foundation of the project is there now.
+
+</details>
